@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- variables in hogan are wrapped in {{ braces }} -->
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/stylesheets/main.css" />
+  </head>
+  <body>
+    <!-- 
+    This is the main view layout. Besides the title (above) and some 
+    body content (below), there aren't many variable things here.
+    Still, it's a good place to add the base structure of your pages.
+    -->
+         
+    <header>
+      <h1>My thesis Project</h1>
+    </header>
+    <section>
+      <!-- include a "partial" view named "body" -->
+      {{> body }}
+    </section>
+    <footer>
+      <section>
+        <ul class="inline">
+          <li><a href="#">Foobar</a></li>
+          <li><a href="#">Foobar</a></li>
+          <li><a href="#">Foobar</a></li>
+          <li><a href="#">Foobar</a></li>
+        </ul>
+      </section>
+    </footer>
+
+    <!-- let's add some client-side scripts, too -->
+    <script src="/scripts/jquery.min.js"></script>
+    <script src="/scripts/main.js"></script>
+
+  </body>
+</html>
+

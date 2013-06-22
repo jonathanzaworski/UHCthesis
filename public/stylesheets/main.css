@@ -1,0 +1,12 @@
+body {
+  background-color: #ffc;
+}
+
+/* An error class */
+.error {
+  border: 1px solid #c99;
+  background-color: #fcc;
+  color: #900;
+  display:none; /* we'll show it again using jQuery */
+  padding: 10px;
+}
