@@ -1,9 +1,0 @@
-var http = require ("http");
-
-
-http.createServer(function(request, response) 
-  {
-  response.write("Hello Cruel World!");
-  response.end();
-  }).listen(5000);
-
