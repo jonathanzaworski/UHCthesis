@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/stylesheets/main.css" />
+  </head>
+  <body>
+    <header>
+      <h1>My thesis Project</h1>
+    </header>
+    <section>
+      {{> body }}
+    </section>
+    <footer>
+      <section>
+        <ul class="inline">
+          <li><a href="#">Foobar</a></li>
+          <li><a href="#">Foobar</a></li>
+          <li><a href="#">Foobar</a></li>
+          <li><a href="#">Foobar</a></li>
+        </ul>
+      </section>
+    </footer>
+  </body>
+</html>
