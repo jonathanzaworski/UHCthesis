@@ -1,1 +1,10 @@
-Goodbye, {{ adjective }} {{ noun }}.
+
+<!-- 
+This is a partial view that we could inject into the main layout.
+Again, just a few variables going on here.
+-->
+
+<p>Goodbye, {{ adjective }} {{ noun }}.</p>
+<p>
+  <a href="/form">Change this?</a>
+</p>

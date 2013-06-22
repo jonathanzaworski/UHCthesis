@@ -1,0 +1,26 @@
+<!-- This form will be POSTed to /form -->
+<form method="post" action="/form">
+  {{#error}}
+  <div class="error">{{ error }}</div>
+  {{/error}}
+
+  <div>
+    <label for="noun">A Noun</label>
+    <input type="text" name="noun" id="noun" value="{{ noun }}" />
+  </div>
+  <div>
+    <!-- 
+      a label's "for" attribute corresponds to an input's
+      "id". The "name" is the name that will be sent back
+      to the server in the POST body. That's why we need 
+      both a "name" and an "id" on the input... 
+    -->
+    <label for="adjective">An adjective</label>
+    <input type="text" name="adjective" id="adjective" value="{{ adjective }}" />
+  </div>
+
+  <!-- And some way to submit the form.. -->
+  <div>
+    <input type="submit" value="Send!" />
+  </div>
+</form>
