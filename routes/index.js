@@ -1,4 +1,6 @@
 var _ = require('lodash');
+var menudata = require('../data/menu.json');
+var menubuilder = require('../menubuilder');
 
 // This is the main route file. Note that its only
 // export is a function that takes an (express)
@@ -21,8 +23,9 @@ module.exports = function (app) {
 
     // Set some defaults for the view data
     var defaults = {
+			pageName: 'My Thesis Project',
       adjective: 'cruel',
-      noun: 'world'
+      noun: 'world'	
     };
 
     // Let's create a variable, "params", that starts
@@ -32,11 +35,13 @@ module.exports = function (app) {
     //
     // Another way to write this would be:
     //
-    //     var params = defaults;
+    //     var params	 = defaults;
     //     if (req.session.noun) params.noun = req.session.noun
     //     if (req.session.adjective) params.adjective = req.session.adjective
     //
-    var params = _.extend(defaults, _.pick(req.session, 'noun', 'adjective'));
+
+    var params = _.extend(defaults, _.pick(req.session, 'noun', 'adjective', 'pageName'));
+		var temp = menubuilder(menudata.root);	
 
     // Define some data for the view...
     var data = {
@@ -47,7 +52,8 @@ module.exports = function (app) {
       },
 
       // ..and "title" is used by the view
-      title: 'Home'
+      title: 'Home',
+			listMenu: temp
     };
 
     // Render the layout. Routing middleware *must*
@@ -59,6 +65,20 @@ module.exports = function (app) {
     res.render('layout', _.extend(data, params));
   });
 
+
+	// TEST: THIS MAY BE A DISASTER
+	app.get('/3c', function(req, res, next) {
+		var data = {
+			partials: {	body: 'index'	},
+			title: 'Home 3c',
+			pageName: 'Item 3c',
+			noun: 'Item',
+			adjective: 'Number 3c'
+		};
+		res.render('layout',data);
+	});
+
+ 
   // Show a form
   app.get('/form', function (req, res, next) {
     var data = {
@@ -66,6 +86,7 @@ module.exports = function (app) {
     };
     res.render('layout', data);
   });
+
 
   // Handle a POSTed form.
   app.post('/form', function (req, res, next) {

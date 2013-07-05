@@ -15,7 +15,7 @@
       to the server in the POST body. That's why we need 
       both a "name" and an "id" on the input... 
     -->
-    <label for="adjective">An adjective</label>
+    <label for="adjective">An Adjective</label>
     <input type="text" name="adjective" id="adjective" value="{{ adjective }}" />
   </div>
 

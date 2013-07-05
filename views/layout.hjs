@@ -13,20 +13,14 @@
     -->
          
     <header>
-      <h1>My thesis Project</h1>
+			<h1> {{pageName}} </h1>
     </header>
-    <section>
-      <!-- include a "partial" view named "body" -->
-      {{> body }}
+    <section>        
+      {{{listMenu}}}
     </section>
     <footer>
       <section>
-        <ul class="inline">
-          <li><a href="#">Foobar</a></li>
-          <li><a href="#">Foobar</a></li>
-          <li><a href="#">Foobar</a></li>
-          <li><a href="#">Foobar</a></li>
-        </ul>
+	      {{> body }}
       </section>
     </footer>
 
