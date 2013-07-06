@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var menudata = require('../data/menu.json');
 var menubuilder = require('../menubuilder');
+var capitalize = require('../capitalize');
 
 // This is the main route file. Note that its only
 // export is a function that takes an (express)
@@ -64,20 +65,6 @@ module.exports = function (app) {
     // hang.
     res.render('layout', _.extend(data, params));
   });
-
-
-	// TEST: THIS MAY BE A DISASTER
-	app.get('/3c', function(req, res, next) {
-		var data = {
-			partials: {	body: 'index'	},
-			title: 'Home 3c',
-			pageName: 'Item 3c',
-			noun: 'Item',
-			adjective: 'Number 3c'
-		};
-		res.render('layout',data);
-	});
-
  
   // Show a form
   app.get('/form', function (req, res, next) {
@@ -151,5 +138,40 @@ module.exports = function (app) {
     // 2. Send a copy back to the browser
     res.send(200, data);
   });
+
+	// TEST: THIS MAY BE A DISASTER
+	app.use(function (req, res, next) {
+/*		var data = {
+			partials: {	body: 'index'	},
+			title: 'Home 3c',
+			pageName: 'Item 3c',
+			noun: 'Item',
+			adjective: 'Number 3c'
+		};
+		res.render('layout',data);
+*/
+		var letters = 'abcde',
+				numbers = '12345';
+
+		var components = _.compact(req.url.split('/'));
+
+		if (letters.indexOf(components[0]) > -1 &&
+				numbers.indexOf(components[1]) > -1) {
+			// now what?
+			// res.send(200, 'Replace me with something better.');
+			data = {
+				partials: { body: 'index' },
+				title: 'Home' + capitalize(components[0]) + components[1],
+				listMenu: menubuilder(menudata.root),
+				pageName: 'Item ' + capitalize(components[0]) + components[1],
+				noun: capitalize(components[0]) + components [1],
+				adjective: 'Page'				
+			};
+			res.render('layout', data);
+		}
+		else {
+			next();
+		}
+	});
 };
 
