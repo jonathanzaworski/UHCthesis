@@ -167,6 +167,7 @@ module.exports = function (app) {
 				noun: capitalize(components[0]) + components [1],
 				adjective: 'Page'				
 			};
+			console.log(Date.now());
 			res.render('layout', data);
 		}
 		else {
