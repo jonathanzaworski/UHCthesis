@@ -4,6 +4,40 @@ var menubuilder = require('../menubuilder');
 var capitalize = require('../capitalize');
 var randomizer = require('../randomizer');
 
+function storeSessionData (req, res, target, data) {
+	if (typeof req.session.destination === 'undefined'){		
+			req.session.destination = [];
+			req.session.timestamp = []
+			req.session.save(function (err) {
+	
+			// Alright! Unless there was an error, the session
+			// should now contain the noun and the adjective..
+				if (err) {
+					console.error('Wtf, session saving failed.');
+				}
+			});
+			res.render('layout', data);
+		}		
+		
+	else {
+			req.session.destination.push(target);
+			req.session.timestamp.push(Date.now())
+			req.session.save(function (err) {
+
+			// Alright! Unless there was an error, the session
+			// should now contain the noun and the adjective..
+				if (err) {
+					console.error('Wtf, session saving failed.');
+				}
+			});
+			res.render('layout', data);
+		};
+};
+
+
+
+
+
 function showNextPage (req, res, target, bootstrap) {
 	var currentPage = _.compact(req.url.split('/'));
 			currentPage = capitalize(currentPage[0]) + currentPage[1];
@@ -19,19 +53,7 @@ function showNextPage (req, res, target, bootstrap) {
 	};
 	console.log(Date.now());
 
-	if (typeof req.session.destination === 'undefined'){		
-		req.session.destination = [];
-		req.session.timestamp = []
-		req.session.save(function (err) {
-
-		// Alright! Unless there was an error, the session
-		// should now contain the noun and the adjective..
-			if (err) {
-				console.error('Wtf, session saving failed.');
-			}
-		});
-	};
-	res.render('layout', data);
+	storeSessionData(req, res, target, data)
 }
 
 // This is the main route file. Note that its only
@@ -195,32 +217,6 @@ module.exports = function (app) {
 		var target = randomizer();
 		var bootstrap = { nextPage: target };
 		target = _.compact(target.split('/'));
-
-		if (typeof req.session.destination === 'undefined'){		
-			req.session.destination = [];
-			req.session.timestamp = []
-			req.session.save(function (err) {
-	
-			// Alright! Unless there was an error, the session
-			// should now contain the noun and the adjective..
-				if (err) {
-					console.error('Wtf, session saving failed.');
-				}
-			});
-		}		
-		
-		else {
-			req.session.destination.push(target);
-			req.session.timestamp.push(Date.now())
-			req.session.save(function (err) {
-
-			// Alright! Unless there was an error, the session
-			// should now contain the noun and the adjective..
-				if (err) {
-					console.error('Wtf, session saving failed.');
-				}
-			});
-		};
 
 		if (letters.indexOf(components[0]) > -1 &&
 				numbers.indexOf(components[1]) > -1) {
