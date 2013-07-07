@@ -19,6 +19,18 @@ function showNextPage (req, res, target, bootstrap) {
 	};
 	console.log(Date.now());
 	res.render('layout', data);
+		if (typeof req.session.destination === 'undefined'){		
+			req.session.destination = [];
+			req.session.timestamp = []
+			req.session.save(function (err) {
+	
+			// Alright! Unless there was an error, the session
+			// should now contain the noun and the adjective..
+				if (err) {
+					console.error('Wtf, session saving failed.');
+				}
+			});
+		};
 }
 
 // This is the main route file. Note that its only
@@ -51,6 +63,17 @@ module.exports = function (app) {
 			adjective: 'Page',
 			bootstrap: JSON.stringify(bootstrap)	
     };
+
+/*		req.session.destination = [target];
+		req.session.timestamp = [Date.now()]
+		req.session.save(function (err) {
+
+		// Alright! Unless there was an error, the session
+		// should now contain the noun and the adjective..
+			if (err) {
+				console.error('Wtf, session saving failed.');
+			}
+		}); */
 
     // Let's create a variable, "params", that starts
     // with the defaults above and overwrites them
@@ -134,15 +157,12 @@ module.exports = function (app) {
     req.session.adjective = req.body.adjective;
     req.session.save(function (err) {
 
-      // Alright! Unless there was an error, the session
-      // should now contain the noun and the adjective..
-      if (err) {
-        console.error('Wtf, session saving failed.');
-      }
-
-      // Redirect to the homepage
-      res.redirect('/');
-    });
+		// Alright! Unless there was an error, the session
+		// should now contain the noun and the adjective..
+			if (err) {
+				console.error('Wtf, session saving failed.');
+			}
+		});
 		showNextPage(req, res, target, bootstrap);
   });
 
@@ -185,6 +205,37 @@ module.exports = function (app) {
 		else {
 			next();
 		}
+		if (typeof req.session.destination === 'undefined'){		
+			req.session.destination = [];
+			req.session.timestamp = []
+			req.session.save(function (err) {
+	
+			// Alright! Unless there was an error, the session
+			// should now contain the noun and the adjective..
+				if (err) {
+					console.error('Wtf, session saving failed.');
+				}
+			});
+		}		
+		
+		else {
+			req.session.destination.push(target);
+			req.session.timestamp.push(Date.now())
+			req.session.save(function (err) {
+
+			// Alright! Unless there was an error, the session
+			// should now contain the noun and the adjective..
+				if (err) {
+					console.error('Wtf, session saving failed.');
+				}
+			});
+		};
+	});
+	
+	app.post('/events', function(req, res, next) {
+	
+			res.send( 200, JSON.stringify(req.body));
+			console.log(req.body);			
 	});
 };
 

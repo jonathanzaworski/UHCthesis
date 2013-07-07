@@ -20,8 +20,15 @@ jQuery(document).ready(function ($) {
     $(testString).click(function(e) {
         e.preventDefault();
         alert('You clicked on the wrong link.');
+				$.post('/events', { 
+					clicks: 'bad',
+					target: $(e.target).attr('href')														  
+				});
     });
+		$.post('/events', {
+			clicks: 'good' ,
+			target: bootstrap.nextPage
+			});		
 	});
-
 	console.log(bootstrap.nextPage)
 });
