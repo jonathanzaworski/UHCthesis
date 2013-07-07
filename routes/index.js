@@ -5,6 +5,13 @@ var capitalize = require('../capitalize');
 var randomizer = require('../randomizer');
 
 function storeSessionData (req, res, target, data) {
+
+	app.post('/events', function(req, res, next) {
+	
+			res.send( 200, JSON.stringify(req.body));
+			//console.log(req.body);			
+	});
+
 	if (typeof req.session.destination === 'undefined'){		
 			req.session.destination = [];
 			req.session.timestamp = []
@@ -15,8 +22,8 @@ function storeSessionData (req, res, target, data) {
 				if (err) {
 					console.error('Wtf, session saving failed.');
 				}
+				res.render('layout', data);
 			});
-			res.render('layout', data);
 		}		
 		
 	else {
@@ -29,8 +36,8 @@ function storeSessionData (req, res, target, data) {
 				if (err) {
 					console.error('Wtf, session saving failed.');
 				}
+				res.render('layout', data);
 			});
-			res.render('layout', data);
 		};
 };
 
@@ -231,11 +238,6 @@ module.exports = function (app) {
 		}
 	});
 	
-	app.post('/events', function(req, res, next) {
-	
-			res.send( 200, JSON.stringify(req.body));
-			console.log(req.body);			
-	});
 };
 
 /*
