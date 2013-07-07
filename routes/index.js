@@ -209,7 +209,7 @@ module.exports = function (app) {
     //res.send(200, data);
  
 
-		MongoClient.connect('mongodb://127.0.0.1:27017/thesisdb', function(err, db) {
+		MongoClient.connect('mongodb://heroku:bdca8308645ba6dd5dbaff676c5c2597@dharma.mongohq.com:10092/app16769713', function(err, db) {
 			if(err) throw err;
 
 			var collection = db.collection('sessionData');
