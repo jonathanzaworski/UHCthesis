@@ -3,6 +3,8 @@ var menudata = require('../data/menu.json');
 var menubuilder = require('../menubuilder');
 var capitalize = require('../capitalize');
 var randomizer = require('../randomizer');
+var MongoClient = require('mongodb').MongoClient
+		, format = require('util').format; 
 
 function storeSessionData (req, res, target, data) {
 
@@ -204,7 +206,32 @@ module.exports = function (app) {
     console.log(data);
 
     // 2. Send a copy back to the browser
-    res.send(200, data);
+    //res.send(200, data);
+ 
+
+		MongoClient.connect('mongodb://127.0.0.1:27017/thesisdb', function(err, db) {
+			if(err) throw err;
+
+			var collection = db.collection('sessionData');
+			var testObject = {
+				targets : req.session.destination,
+				times : req.session.timestamp
+			};
+			collection.insert({Testdata : testObject }, function(err, docs) {
+
+				collection.count(function(err, count) {
+					console.log(format("count = %s", count));
+				});
+
+				// Locate all the entries using find
+				collection.find().toArray(function(err, results) {
+					console.dir(results);
+					// Let's close the db
+					db.close();
+				});      
+			});
+		})
+	res.redirect('/');
   });
 
 	// TEST: THIS MAY BE A DISASTER
