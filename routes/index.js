@@ -2,6 +2,21 @@ var _ = require('lodash');
 var menudata = require('../data/menu.json');
 var menubuilder = require('../menubuilder');
 var capitalize = require('../capitalize');
+var randomizer = require('../randomizer');
+
+function showNextPage (req, res, letter, number, target, bootstrap) {
+	var data = {
+		partials: { body: 'index' },
+		title: 'Home' + letter + number,
+		listMenu: menubuilder(menudata.root),
+		pageName: 'Item ' + letter + number,
+		noun: target,
+		adjective: 'Page',
+		bootstrap: JSON.stringify(bootstrap)				
+	};
+	console.log(Date.now());
+	res.render('layout', data);
+}
 
 // This is the main route file. Note that its only
 // export is a function that takes an (express)
@@ -25,8 +40,8 @@ module.exports = function (app) {
     // Set some defaults for the view data
     var defaults = {
 			pageName: 'My Thesis Project',
-      adjective: 'cruel',
-      noun: 'world'	
+      adjective: 'Page',
+      noun: 'A6'	
     };
 
     // Let's create a variable, "params", that starts
@@ -154,21 +169,18 @@ module.exports = function (app) {
 				numbers = '12345';
 
 		var components = _.compact(req.url.split('/'));
-
+		var target = randomizer();
+		var bootstrap = { nextPage: target };
+		target = _.compact(target.split('/'));
 		if (letters.indexOf(components[0]) > -1 &&
 				numbers.indexOf(components[1]) > -1) {
+				var letter = capitalize(components[0]); 
+				var number = components[1];
+				target = capitalize(target[0]) + target[1];
 			// now what?
 			// res.send(200, 'Replace me with something better.');
-			data = {
-				partials: { body: 'index' },
-				title: 'Home' + capitalize(components[0]) + components[1],
-				listMenu: menubuilder(menudata.root),
-				pageName: 'Item ' + capitalize(components[0]) + components[1],
-				noun: capitalize(components[0]) + components [1],
-				adjective: 'Page'				
-			};
-			console.log(Date.now());
-			res.render('layout', data);
+			showNextPage(req, res, letter, number, target, bootstrap);
+
 		}
 		else {
 			next();

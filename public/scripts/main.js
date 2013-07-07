@@ -14,4 +14,14 @@ jQuery(document).ready(function ($) {
 			$('ul', this).stop().slideUp(100);			
 		}
 	);
+
+	$(document).ready(function() {
+		var testString = 'a[href!=\"' + bootstrap.nextPage + '\"]';
+    $(testString).click(function(e) {
+        e.preventDefault();
+        alert('You clicked on the wrong link.');
+    });
+	});
+
+	console.log(bootstrap.nextPage)
 });
