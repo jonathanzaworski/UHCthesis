@@ -18,19 +18,20 @@ function showNextPage (req, res, target, bootstrap) {
 		bootstrap: JSON.stringify(bootstrap)				
 	};
 	console.log(Date.now());
+
+	if (typeof req.session.destination === 'undefined'){		
+		req.session.destination = [];
+		req.session.timestamp = []
+		req.session.save(function (err) {
+
+		// Alright! Unless there was an error, the session
+		// should now contain the noun and the adjective..
+			if (err) {
+				console.error('Wtf, session saving failed.');
+			}
+		});
+	};
 	res.render('layout', data);
-		if (typeof req.session.destination === 'undefined'){		
-			req.session.destination = [];
-			req.session.timestamp = []
-			req.session.save(function (err) {
-	
-			// Alright! Unless there was an error, the session
-			// should now contain the noun and the adjective..
-				if (err) {
-					console.error('Wtf, session saving failed.');
-				}
-			});
-		};
 }
 
 // This is the main route file. Note that its only
@@ -194,17 +195,7 @@ module.exports = function (app) {
 		var target = randomizer();
 		var bootstrap = { nextPage: target };
 		target = _.compact(target.split('/'));
-		if (letters.indexOf(components[0]) > -1 &&
-				numbers.indexOf(components[1]) > -1) {
-				target = capitalize(target[0]) + target[1];
-			// now what?
-			// res.send(200, 'Replace me with something better.');
-			showNextPage(req, res, target, bootstrap);
 
-		}
-		else {
-			next();
-		}
 		if (typeof req.session.destination === 'undefined'){		
 			req.session.destination = [];
 			req.session.timestamp = []
@@ -230,6 +221,18 @@ module.exports = function (app) {
 				}
 			});
 		};
+
+		if (letters.indexOf(components[0]) > -1 &&
+				numbers.indexOf(components[1]) > -1) {
+				target = capitalize(target[0]) + target[1];
+			// now what?
+			// res.send(200, 'Replace me with something better.');
+			showNextPage(req, res, target, bootstrap);
+
+		}
+		else {
+			next();
+		}
 	});
 	
 	app.post('/events', function(req, res, next) {
