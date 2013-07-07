@@ -4,12 +4,15 @@ var menubuilder = require('../menubuilder');
 var capitalize = require('../capitalize');
 var randomizer = require('../randomizer');
 
-function showNextPage (req, res, letter, number, target, bootstrap) {
+function showNextPage (req, res, target, bootstrap) {
+	var currentPage = _.compact(req.url.split('/'));
+			currentPage = capitalize(currentPage[0]) + currentPage[1];
+
 	var data = {
 		partials: { body: 'index' },
-		title: 'Home' + letter + number,
+		title: 'Home' + currentPage,
 		listMenu: menubuilder(menudata.root),
-		pageName: 'Item ' + letter + number,
+		pageName: 'Item ' + currentPage,
 		noun: target,
 		adjective: 'Page',
 		bootstrap: JSON.stringify(bootstrap)				
@@ -38,10 +41,15 @@ module.exports = function (app) {
   app.get('/', function (req, res, next) {
 
     // Set some defaults for the view data
-    var defaults = {
-			pageName: 'My Thesis Project',
-      adjective: 'Page',
-      noun: 'A6'	
+		var target = randomizer();
+		var bootstrap = { nextPage: target };  
+				target = _.compact(target.split('/'));
+				target = capitalize(target[0]) + target[1];		  
+		var defaults = {		
+			pageName: 'My Thesis Project: Home',
+			noun: target,
+			adjective: 'Page',
+			bootstrap: JSON.stringify(bootstrap)	
     };
 
     // Let's create a variable, "params", that starts
@@ -69,7 +77,7 @@ module.exports = function (app) {
 
       // ..and "title" is used by the view
       title: 'Home',
-			listMenu: temp
+			listMenu: menubuilder(menudata.root)
     };
 
     // Render the layout. Routing middleware *must*
@@ -135,6 +143,7 @@ module.exports = function (app) {
       // Redirect to the homepage
       res.redirect('/');
     });
+		showNextPage(req, res, target, bootstrap);
   });
 
 
@@ -156,17 +165,10 @@ module.exports = function (app) {
 
 	// TEST: THIS MAY BE A DISASTER
 	app.use(function (req, res, next) {
-/*		var data = {
-			partials: {	body: 'index'	},
-			title: 'Home 3c',
-			pageName: 'Item 3c',
-			noun: 'Item',
-			adjective: 'Number 3c'
-		};
-		res.render('layout',data);
-*/
+
 		var letters = 'abcde',
 				numbers = '12345';
+
 
 		var components = _.compact(req.url.split('/'));
 		var target = randomizer();
@@ -174,12 +176,10 @@ module.exports = function (app) {
 		target = _.compact(target.split('/'));
 		if (letters.indexOf(components[0]) > -1 &&
 				numbers.indexOf(components[1]) > -1) {
-				var letter = capitalize(components[0]); 
-				var number = components[1];
 				target = capitalize(target[0]) + target[1];
 			// now what?
 			// res.send(200, 'Replace me with something better.');
-			showNextPage(req, res, letter, number, target, bootstrap);
+			showNextPage(req, res, target, bootstrap);
 
 		}
 		else {
@@ -188,3 +188,8 @@ module.exports = function (app) {
 	});
 };
 
+/*
+var events = {
+	timestamps = []
+}
+*/
