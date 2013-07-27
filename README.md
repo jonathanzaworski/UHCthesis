@@ -1,8 +1,15 @@
 UHCthesis
 =========
 
-code for my thesis.
+installation:
+-------------
 
-testing to see if I can "git 'er done"
+    $ npm install -g mocha foreman grunt-cli
+    $ npm install --dev 
+
+running:
+---------
+
+    $ nf start
 
 

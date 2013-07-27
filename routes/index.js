@@ -6,11 +6,31 @@ var randomizer = require('../randomizer');
 var MongoClient = require('mongodb').MongoClient
 		, format = require('util').format; 
 
+//function isRadial ():Boolean {
+//		return Math.random() >= 0.5;
+//};
+
+/*
+function clickEventHandler (req, res, target, clickData) {
+	if (typeof req.session.destination === 'undefined'){
+		req.session.clickEvent = [];
+	}
+	else {
+		req.session.clickEvent.push({
+			clickTarget: req.body.target,
+			clickActual: req.body.clicks,
+			clickTime: req.body.time
+		})
+	}
+};*/
+
 function storeSessionData (req, res, target, data) {
 
 	if (typeof req.session.destination === 'undefined'){		
-			req.session.destination = [];
-			req.session.timestamp = []
+			req.session.destination = [target];
+//			req.session.pageStartTime = [];
+//			req.session.pageEndTime = [Date.now()];
+			req.session.pageCounter = req.session.pageCounter + 1;			
 			req.session.save(function (err) {
 	
 			// Alright! Unless there was an error, the session
@@ -21,10 +41,25 @@ function storeSessionData (req, res, target, data) {
 				res.render('layout', data);
 			});
 		}		
+	
+	else if (req.session.pageCounter > 2) {
+			req.session.destination.push(target);
+//			req.session.pageEndTime.push(Date.now());
+			req.session.save(function (err) {
+
+			// Alright! Unless there was an error, the session
+			// should now contain the noun and the adjective..
+				if (err) {
+					console.error('Wtf, session saving failed.');
+				}
+				res.redirect('/save');
+			});
+		}
 		
 	else {
 			req.session.destination.push(target);
-			req.session.timestamp.push(Date.now())
+			req.session.pageCounter = req.session.pageCounter + 1;
+//			req.session.pageEndTime.push(Date.now());
 			req.session.save(function (err) {
 
 			// Alright! Unless there was an error, the session
@@ -35,28 +70,28 @@ function storeSessionData (req, res, target, data) {
 				res.render('layout', data);
 			});
 		};
+	console.log(req.session.pageCounter);
 };
-
-
-
 
 
 function showNextPage (req, res, target, bootstrap) {
 	var currentPage = _.compact(req.url.split('/'));
 			currentPage = capitalize(currentPage[0]) + currentPage[1];
-
+	
 	var data = {
 		partials: { body: 'index' },
 		title: 'Home' + currentPage,
 		listMenu: menubuilder(menudata.root),
-		pageName: 'Item ' + currentPage,
+		pageName: currentPage,
 		noun: target,
 		adjective: 'Page',
-		bootstrap: JSON.stringify(bootstrap)				
+		bootstrap: JSON.stringify(bootstrap),			
 	};
-	console.log(Date.now());
-
 	storeSessionData(req, res, target, data)
+	console.log(req.session)
+	if (req.session.pageCounter <= 2) {
+	req.session.pageStartTime.push(Date.now())
+	}
 }
 
 // This is the main route file. Note that its only
@@ -77,7 +112,8 @@ module.exports = function (app) {
   // in its path (`'/'`) and a middleware for handling
   // it.
   app.get('/', function (req, res, next) {
-
+		req.session.pageCounter = 0;
+		req.session.pageStartTime= [Date.now()];
     // Set some defaults for the view data
 		var target = randomizer();
 		var bootstrap = { nextPage: target };  
@@ -87,19 +123,9 @@ module.exports = function (app) {
 			pageName: 'My Thesis Project: Home',
 			noun: target,
 			adjective: 'Page',
-			bootstrap: JSON.stringify(bootstrap)	
+			bootstrap: JSON.stringify(bootstrap),
     };
 
-/*		req.session.destination = [target];
-		req.session.timestamp = [Date.now()]
-		req.session.save(function (err) {
-
-		// Alright! Unless there was an error, the session
-		// should now contain the noun and the adjective..
-			if (err) {
-				console.error('Wtf, session saving failed.');
-			}
-		}); */
 
     // Let's create a variable, "params", that starts
     // with the defaults above and overwrites them
@@ -137,7 +163,9 @@ module.exports = function (app) {
     // hang.
     res.render('layout', _.extend(data, params));
   });
- 
+
+
+/* 
   // Show a form
   app.get('/form', function (req, res, next) {
     var data = {
@@ -145,8 +173,34 @@ module.exports = function (app) {
     };
     res.render('layout', data);
   });
+*/
+	
+	app.post('/events', function(req, res, next) {
+		var clickEvent = {
+				clickTarget: req.body.target,
+				clickActual: req.body.clicks,
+				clickTime: req.body.time
+		};
 
+		if (typeof req.session.clickEvent === 'undefined'){
+			req.session.clickEvent = [clickEvent];
+		}
+		else {
+			req.session.clickEvent.push(clickEvent)
+		}
+		req.session.save(function (err) {
 
+		// Alright! Unless there was an error, the session
+		// should now contain the noun and the adjective..
+			if (err) {
+				console.error('Wtf, session saving failed.');
+			}
+		});
+		console.log(req.session.clickEvent)
+		 
+	});	
+
+/*
   // Handle a POSTed form.
   app.post('/form', function (req, res, next) {
 
@@ -179,8 +233,11 @@ module.exports = function (app) {
 
     // Ok, now we've succeeded. Groovy. We'll store the
     // variables in the user's session for later use...
-    req.session.noun = req.body.noun;
-    req.session.adjective = req.body.adjective;
+    req.session.demographics : {
+			age :  ,
+			gender :  , 
+			techSavvy: 
+		};
     req.session.save(function (err) {
 
 		// Alright! Unless there was an error, the session
@@ -191,7 +248,7 @@ module.exports = function (app) {
 		});
 		showNextPage(req, res, target, bootstrap);
   });
-
+	*/
 
   // Save a user session.
   // We would probably want to POST this from a consent
@@ -208,14 +265,29 @@ module.exports = function (app) {
     // 2. Send a copy back to the browser
     //res.send(200, data);
  
+     //use this link for heroku database: mongodb://heroku:bdca8308645ba6dd5dbaff676c5c2597@dharma.mongohq.com:10092/app16769713
 
-		MongoClient.connect('mongodb://heroku:bdca8308645ba6dd5dbaff676c5c2597@dharma.mongohq.com:10092/app16769713', function(err, db) {
+		var testObject = {
+//		***Don't try to run until you've set it up to run this stuff.***
+//				demographicData : req.session.demographics,
+				targets : req.session.destination,
+				startTimes : req.session.pageStartTime,
+//				endTimes : req.session.pageEndTime,
+				clickEvents : req.session.clickEvent
+		};
+
+		console.log(testObject);
+/*
+		MongoClient.connect('mongodb://127.0.0.1:27017/thesisdb', function(err, db) {
 			if(err) throw err;
 
 			var collection = db.collection('sessionData');
 			var testObject = {
+//		***Don't try to run until you've set it up to run this stuff.***
+//				demographicData : req.session.demographics,
 				targets : req.session.destination,
-				times : req.session.timestamp
+				startTimes : req.session.pageStartTime,
+				endTimes : req.session.pageEndTime
 			};
 			collection.insert({Testdata : testObject }, function(err, docs) {
 
@@ -231,12 +303,12 @@ module.exports = function (app) {
 				});      
 			});
 		})
-	res.redirect('/');
+*/
+		res.redirect('/null');
   });
 
-	// TEST: THIS MAY BE A DISASTER
+	// TEST: THIS WASN'T A DISASTER. SOMEHOW.
 	app.use(function (req, res, next) {
-
 		var letters = 'abcde',
 				numbers = '12345';
 
@@ -261,7 +333,8 @@ module.exports = function (app) {
 
 	app.post('/events', function(req, res, next) {	
 		res.send( 200, JSON.stringify(req.body));
-		//console.log(req.body);			
+
+	//	console.log(req.body);			
 	});
 };
 

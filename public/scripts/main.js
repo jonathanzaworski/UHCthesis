@@ -19,15 +19,17 @@ jQuery(document).ready(function ($) {
 		var testString = 'a[href!=\"' + bootstrap.nextPage + '\"]';
     $(testString).click(function(e) {
         e.preventDefault();
-        alert('You clicked on the wrong link.');
 				$.post('/events', { 
 					clicks: 'bad',
-					target: $(e.target).attr('href')														  
+					target: $(e.target).attr('href'),
+					time: Date.now()
 				});
+        alert('You clicked on the wrong link.');				
     });
 		$.post('/events', {
 			clicks: 'good' ,
-			target: bootstrap.nextPage
+			target: bootstrap.nextPage,
+			time: Date.now()
 			});		
 	});
 	console.log(bootstrap.nextPage)
