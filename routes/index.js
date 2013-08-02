@@ -52,7 +52,7 @@ function storeSessionData (req, res, target, data) {
 				if (err) {
 					console.error('Wtf, session saving failed.');
 				}
-				res.redirect('/save');
+				res.redirect('/finish');
 			});
 		}
 		
@@ -113,7 +113,7 @@ module.exports = function (app) {
   // it.
 	app.get('/start', function (req, res, next) {
     var params = {
-			pageName: 'PageName',
+			pageName: 'First Page',
 			bootstrap: []		
 		};
 
@@ -129,6 +129,26 @@ module.exports = function (app) {
 			listMenu: []
     };
 
+		res.render('layout', _.extend(data, params))		
+	});
+
+	app.get('/finish', function (req, res, next) {
+    var params = {
+			pageName: 'Final Page',
+			bootstrap: []		
+		};
+
+    var data = {
+      partials: {
+        // Notice that we're passing the name of the
+        // body partial into the layout.
+        body: 'endform'
+      },
+
+      // ..and "title" is used by the view
+      title: 'Finish',
+			listMenu: []
+    };
 		res.render('layout', _.extend(data, params))		
 	});
 
@@ -273,7 +293,16 @@ module.exports = function (app) {
 		});
 		res.redirect('/main');
   });
-	
+
+  // Handle a POSTed form.
+  app.post('/canSave', function (req, res, next) {
+		if (req.body.save == 'no') {
+			return res.redirect('/nodataforyou')
+		};
+		
+		return res.redirect('/save');
+  });
+		
 
   // Save a user session.
   // We would probably want to POST this from a consent
@@ -285,7 +314,7 @@ module.exports = function (app) {
     var data = req.session;
     
     // 1. Dump a copy to the log
-    console.log(data);
+//    console.log(data);
 
     // 2. Send a copy back to the browser
     //res.send(200, data);

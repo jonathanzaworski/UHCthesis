@@ -1,0 +1,11 @@
+<!-- This form will be POSTed to /form -->
+<form method="post" action="/canSave">
+
+	<p>By selecting yes, you are saying that you are okay with me/us using the various data collected during this experiment.</p>			
+	<div>
+		<input type="submit" name="save" value="yes"> 
+		<input type="submit" name="save" value="no"> 
+	</div>
+
+</form>
+
