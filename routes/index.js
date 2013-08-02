@@ -111,7 +111,28 @@ module.exports = function (app) {
   // Since we want to GET the homepage, we'll pass
   // in its path (`'/'`) and a middleware for handling
   // it.
-  app.get('/', function (req, res, next) {
+	app.get('/start', function (req, res, next) {
+    var params = {
+			pageName: 'PageName',
+			bootstrap: []		
+		};
+
+    var data = {
+      partials: {
+        // Notice that we're passing the name of the
+        // body partial into the layout.
+        body: 'form'
+      },
+
+      // ..and "title" is used by the view
+      title: 'Start',
+			listMenu: []
+    };
+
+		res.render('layout', _.extend(data, params))		
+	});
+
+  app.get('/main', function (req, res, next) {
 		req.session.pageCounter = 0;
 		req.session.pageStartTime= [Date.now()];
     // Set some defaults for the view data
@@ -120,7 +141,7 @@ module.exports = function (app) {
 				target = _.compact(target.split('/'));
 				target = capitalize(target[0]) + target[1];		  
 		var defaults = {		
-			pageName: 'My Thesis Project: Home',
+			pageName: 'Thesis Project: Beginning',
 			noun: target,
 			adjective: 'Page',
 			bootstrap: JSON.stringify(bootstrap),
@@ -200,18 +221,21 @@ module.exports = function (app) {
 		 
 	});	
 
-/*
+
   // Handle a POSTed form.
   app.post('/form', function (req, res, next) {
 
     var data, error;
 
     // handle some errors
-    if (req.body.adjective.length < 3) {
-      error = 'The adjective must be at least three letters long';
+    if (typeof req.body.sex == 'undefined') {
+      error = 'Please Select a Gender';
     }
-    else if (req.body.noun.length < 3) {
-      error = 'The things must be at least three letters long';
+    else if (typeof req.body.age == 'undefined') {
+      error = 'Please Select an Age Group';
+    }
+    else if (typeof req.body.tech == 'undefined') {
+      error = 'Please Select a Level of Computer Experience';
     }
 
     if (error) {
@@ -233,11 +257,12 @@ module.exports = function (app) {
 
     // Ok, now we've succeeded. Groovy. We'll store the
     // variables in the user's session for later use...
-    req.session.demographics : {
-			age :  ,
-			gender :  , 
-			techSavvy: 
+    req.session.demographics = {
+			age :  req.body.age,
+			gender : req.body.sex  , 
+			techSavvy: req.body.tech
 		};
+
     req.session.save(function (err) {
 
 		// Alright! Unless there was an error, the session
@@ -246,9 +271,9 @@ module.exports = function (app) {
 				console.error('Wtf, session saving failed.');
 			}
 		});
-		showNextPage(req, res, target, bootstrap);
+		res.redirect('/main');
   });
-	*/
+	
 
   // Save a user session.
   // We would probably want to POST this from a consent
@@ -269,7 +294,7 @@ module.exports = function (app) {
 
 		var testObject = {
 //		***Don't try to run until you've set it up to run this stuff.***
-//				demographicData : req.session.demographics,
+				demographicData : req.session.demographics,
 				targets : req.session.destination,
 				startTimes : req.session.pageStartTime,
 //				endTimes : req.session.pageEndTime,

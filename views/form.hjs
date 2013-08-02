@@ -1,26 +1,36 @@
 <!-- This form will be POSTed to /form -->
 <form method="post" action="/form">
-  {{#error}}
-  <div class="error">{{ error }}</div>
-  {{/error}}
+	{{#error}}
+	<div class="error">{{ error }}</div>
+	{{/error}}
+	<p>Gender</p>			
+	<div>
+		<input type="radio" name="sex" value="male">Male<br>
+		<input type="radio" name="sex" value="female">Female<br>
+		<input type="radio" name="sex" value="none">I don't want to say<br>
+	</div>
 
-  <div>
-    <label for="noun">A Noun</label>
-    <input type="text" name="noun" id="noun" value="{{ noun }}" />
-  </div>
-  <div>
-    <!-- 
-      a label's "for" attribute corresponds to an input's
-      "id". The "name" is the name that will be sent back
-      to the server in the POST body. That's why we need 
-      both a "name" and an "id" on the input... 
-    -->
-    <label for="adjective">An Adjective</label>
-    <input type="text" name="adjective" id="adjective" value="{{ adjective }}" />
-  </div>
+	<p>Age</p>
+	<div>
+		<input type="radio" name="age" value="kid">Under 18<br>
+		<input type="radio" name="age" value="adult">18-30<br>
+		<input type="radio" name="age" value="mature">31-45<br>
+		<input type="radio" name="age" value="verymature">46-60<br>
+		<input type="radio" name="age" value="senior">60+<br>
+	</div>
 
-  <!-- And some way to submit the form.. -->
-  <div>
-    <input type="submit" value="Send!" />
-  </div>
+	<p>Familiarity With Computers</p>
+	<div>
+		<input type="radio" name="tech" value="casual"> I use a computer occasionally, for basic tasks<br>
+		<input type="radio" name="tech" value="comfortable"> I use a computer every day<br>
+		<input type="radio" name="tech" value="power"> I change my computers' settings on a regular basis<br>
+		<input type="radio" name="tech" value="programmer">I know regular expressions <br>
+		<input type="radio" name="tech" value="none">I don't want to say <br>
+	</div>
+
+	<p>note: Your data will not be stored until you have completed the exercise. If you are under 18, you are not eligible to participate in 					 this exercise and will be redirected away from this page.</p>
+	<div>
+		<input type="submit"> 
+	</div>
 </form>
+
