@@ -25,7 +25,6 @@ function clickEventHandler (req, res, target, clickData) {
 };*/
 
 function storeSessionData (req, res, target, data) {
-
 	if (typeof req.session.destination === 'undefined'){		
 			req.session.destination = [target];
 //			req.session.pageStartTime = [];
@@ -42,7 +41,7 @@ function storeSessionData (req, res, target, data) {
 			});
 		}		
 	
-	else if (req.session.pageCounter > 2) {
+	else if (req.session.pageCounter >= 2) {
 			req.session.destination.push(target);
 //			req.session.pageEndTime.push(Date.now());
 			req.session.save(function (err) {
@@ -90,7 +89,7 @@ function showNextPage (req, res, target, bootstrap) {
 	storeSessionData(req, res, target, data)
 	console.log(req.session)
 	if (req.session.pageCounter <= 2) {
-	req.session.pageStartTime.push(Date.now())
+		req.session.pageStartTime.push(Date.now())
 	}
 }
 
