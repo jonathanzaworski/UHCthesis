@@ -5,7 +5,8 @@ var radMenuBuilder = require('../radMenuBuilder');
 var capitalize = require('../capitalize');
 var randomizer = require('../randomizer');
 var MongoClient = require('mongodb').MongoClient, 
-		format = require('util').format; 
+		format = require('util').format;
+
 //function isRadial ():Boolean {
 //		return Math.random() >= 0.5;
 //};
@@ -87,10 +88,12 @@ function storeSessionData (req, res, target, data) {
 }
 
 
-function showNextPage (req, res, target, bootstrap, menuVar) {
+function showNextPage (req, res, target, bootstrap) {
 	var currentPage = _.compact(req.url.split('/'));
 			currentPage = capitalize(currentPage[0]) + currentPage[1];
-	
+
+	var menuVar = "radial";
+
 	var data = {
 		partials: { body: 'index' },
 		title: 'Home' + currentPage,
