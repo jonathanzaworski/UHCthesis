@@ -5,15 +5,15 @@
 		
 		return this.each(function(){
 			/* ------------------------ Function for Radial Responsive menu  ------------------------ */
-			var radLevelOneShown = true, 	radLevelTwoShown = false, 	radLevelThreeShown = false,
+			var radLevelOneShown = false, 	radLevelTwoShown = false, 	radLevelThreeShown = false,
 				$radFirstLevel, $radSecondLevel,
 				$radLevelOneItems, $radLevelTwoItems,
 				$level1, $level2, $level3,
 				$menuItems,
 				
 				angleDegree, angleRad,
-				outerAngleIncrease = 90/(options.outerRing_items-1),
-				innerAngleIncrease = 90/(options.innerRing_items-1),
+				outerAngleIncrease = 180/(options.outerRing_items-1),
+				innerAngleIncrease = 180/(options.innerRing_items-1),
 				toRadians = Math.PI / 180,
 			
 				xCoord, yCoord,

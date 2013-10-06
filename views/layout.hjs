@@ -12,13 +12,13 @@
 			//console.log(window.location.search[1]);
 			$('#radial-menu').radialResponsiveMenu({
 				'circleRadius': 60,
-				//'innerRing_items': 5,
-				//'outerRing_items': 0,
+				'innerRing_items': 5,
+				'outerRing_items': 0,
 				'innerRing_radius': 100,
 				'outerRing_radius': 200,
 				'togglePosition': 'top-left'
 			});
-			$('.positioned').css({ 'top': '5%', 'left':'25%' });
+			$('.positioned').css({ 'top': '15%', 'left':'25%' });
 		});
 	</script>
   <body>
@@ -41,8 +41,8 @@
     </footer>
 
     <!-- let's add some client-side scripts, too -->
-		<link rel="stylesheet" href="/stylesheets/main.css">
-    <!--script src="/scripts/jquery.min.js"></script-->
+		<!link rel="stylesheet" href="/stylesheets/main.css">
+    <!script src="/scripts/jquery.min.js"></script>
     <script src="/scripts/radmain.js"></script>
 		{{# bootstrap }}
     <script>window.bootstrap = {{{ bootstrap }}};</script>
