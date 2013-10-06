@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <head>
     <!-- variables in hogan are wrapped in {{ braces }} -->
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="/stylesheets/main.css" />
   </head>
+	<link rel="stylesheet" href="/stylesheets/radial-responsive-menu.css">
+	<script src="/scripts/jquery-1.8.3.js"></script> 
+	<script src="/scripts/jquery.radialresponsivemenu.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			//console.log(window.location.search[1]);
+			$('#radial-menu').radialResponsiveMenu({
+				'circleRadius': 60,
+				//'innerRing_items': 5,
+				//'outerRing_items': 0,
+				'innerRing_radius': 100,
+				'outerRing_radius': 200,
+				'togglePosition': 'top-left'
+			});
+			$('.positioned').css({ 'top': '5%', 'left':'25%' });
+		});
+	</script>
   <body>
     <!-- 
     This is the main view layout. Besides the title (above) and some 
@@ -16,7 +32,7 @@
 			<h1> {{pageName}} </h1>
     </header>
     <section>        
-      {{{listMenu}}}
+      {{{menu}}}
     </section>
     <footer>
       <section>
@@ -25,8 +41,9 @@
     </footer>
 
     <!-- let's add some client-side scripts, too -->
-    <script src="/scripts/jquery.min.js"></script>
-    <script src="/scripts/main.js"></script>
+		<link rel="stylesheet" href="/stylesheets/main.css">
+    <!--script src="/scripts/jquery.min.js"></script-->
+    <script src="/scripts/radmain.js"></script>
 		{{# bootstrap }}
     <script>window.bootstrap = {{{ bootstrap }}};</script>
     {{/ bootstrap }}

@@ -1,11 +1,11 @@
 var _ = require('lodash');
 var menudata = require('../data/menu.json');
 var menubuilder = require('../menubuilder');
+var radMenuBuilder = require('../radMenuBuilder');
 var capitalize = require('../capitalize');
 var randomizer = require('../randomizer');
-var MongoClient = require('mongodb').MongoClient
-		, format = require('util').format; 
-
+var MongoClient = require('mongodb').MongoClient, 
+		format = require('util').format; 
 //function isRadial ():Boolean {
 //		return Math.random() >= 0.5;
 //};
@@ -23,6 +23,20 @@ function clickEventHandler (req, res, target, clickData) {
 		})
 	}
 };*/
+
+function menuType (menuVar) {
+	var menu;
+	if (menuVar == "radial") {
+		menu = radMenuBuilder(menudata.root);
+		console.log("radial");
+		}
+	else {
+		menu = menubuilder(menudata.root);
+		console.log("list");
+	}
+	return menu;
+}
+
 
 function storeSessionData (req, res, target, data) {
 	if (typeof req.session.destination === 'undefined'){		
@@ -68,28 +82,28 @@ function storeSessionData (req, res, target, data) {
 				}
 				res.render('layout', data);
 			});
-		};
+		}
 	console.log(req.session.pageCounter);
-};
+}
 
 
-function showNextPage (req, res, target, bootstrap) {
+function showNextPage (req, res, target, bootstrap, menuVar) {
 	var currentPage = _.compact(req.url.split('/'));
 			currentPage = capitalize(currentPage[0]) + currentPage[1];
 	
 	var data = {
 		partials: { body: 'index' },
 		title: 'Home' + currentPage,
-		listMenu: menubuilder(menudata.root),
+		menu: menuType(menuVar),
 		pageName: currentPage,
 		noun: target,
 		adjective: 'Page',
 		bootstrap: JSON.stringify(bootstrap),			
 	};
-	storeSessionData(req, res, target, data)
-	console.log(req.session)
+	storeSessionData(req, res, target, data);
+	console.log(req.session);
 	if (req.session.pageCounter <= 2) {
-		req.session.pageStartTime.push(Date.now())
+		req.session.pageStartTime.push(Date.now());
 	}
 }
 
@@ -115,7 +129,6 @@ module.exports = function (app) {
 			pageName: 'First Page',
 			bootstrap: []		
 		};
-
     var data = {
       partials: {
         // Notice that we're passing the name of the
@@ -125,10 +138,10 @@ module.exports = function (app) {
 
       // ..and "title" is used by the view
       title: 'Start',
-			listMenu: []
+			menu: []
     };
 
-		res.render('layout', _.extend(data, params))		
+		res.render('layout', _.extend(data, params));		
 	});
 
 	app.get('/finish', function (req, res, next) {
@@ -146,15 +159,16 @@ module.exports = function (app) {
 
       // ..and "title" is used by the view
       title: 'Finish',
-			listMenu: []
+			menu: []
     };
-		res.render('layout', _.extend(data, params))		
+		res.render('layout', _.extend(data, params));		
 	});
 
   app.get('/main', function (req, res, next) {
 		req.session.pageCounter = 0;
 		req.session.pageStartTime= [Date.now()];
     // Set some defaults for the view data
+		var menuVar = "radial"; //call to function will go here. this is for testing purposes.
 		var target = randomizer();
 		var bootstrap = { nextPage: target };  
 				target = _.compact(target.split('/'));
@@ -167,20 +181,8 @@ module.exports = function (app) {
     };
 
 
-    // Let's create a variable, "params", that starts
-    // with the defaults above and overwrites them
-    // with the 'noun' and 'adjective' fields from the
-    // session if they're available.
-    //
-    // Another way to write this would be:
-    //
-    //     var params	 = defaults;
-    //     if (req.session.noun) params.noun = req.session.noun
-    //     if (req.session.adjective) params.adjective = req.session.adjective
-    //
-
     var params = _.extend(defaults, _.pick(req.session, 'noun', 'adjective', 'pageName'));
-		var temp = menubuilder(menudata.root);	
+		//var temp = menuType(menudata.root);	
 
     // Define some data for the view...
     var data = {
@@ -192,7 +194,7 @@ module.exports = function (app) {
 
       // ..and "title" is used by the view
       title: 'Home',
-			listMenu: menubuilder(menudata.root)
+			menu: menuType(menuVar)
     };
 
     // Render the layout. Routing middleware *must*
@@ -202,6 +204,7 @@ module.exports = function (app) {
     // stack. If they do not, the application *will*
     // hang.
     res.render('layout', _.extend(data, params));
+		//console.log(data.menu)
   });
 
 
@@ -226,7 +229,7 @@ module.exports = function (app) {
 			req.session.clickEvent = [clickEvent];
 		}
 		else {
-			req.session.clickEvent.push(clickEvent)
+			req.session.clickEvent.push(clickEvent);
 		}
 		req.session.save(function (err) {
 
@@ -236,7 +239,7 @@ module.exports = function (app) {
 				console.error('Wtf, session saving failed.');
 			}
 		});
-		console.log(req.session.clickEvent)
+		console.log(req.session.clickEvent);
 		 
 	});	
 
@@ -296,8 +299,8 @@ module.exports = function (app) {
   // Handle a POSTed form.
   app.post('/canSave', function (req, res, next) {
 		if (req.body.save == 'no') {
-			return res.redirect('/nodataforyou')
-		};
+			return res.redirect('/nodataforyou');
+		}
 		
 		return res.redirect('/save');
   });
