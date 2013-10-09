@@ -1,36 +1,49 @@
 <!-- This form will be POSTed to /form -->
-<form method="post" action="/form">
-	{{#error}}
-	<div class="error">{{ error }}</div>
-	{{/error}}
-	<p>Gender</p>			
-	<div>
-		<input type="radio" name="sex" value="male">Male<br>
-		<input type="radio" name="sex" value="female">Female<br>
-		<input type="radio" name="sex" value="none">I don't want to say<br>
-	</div>
 
-	<p>Age</p>
-	<div>
-		<input type="radio" name="age" value="kid">Under 18<br>
-		<input type="radio" name="age" value="adult">18-30<br>
-		<input type="radio" name="age" value="mature">31-45<br>
-		<input type="radio" name="age" value="verymature">46-60<br>
-		<input type="radio" name="age" value="senior">60+<br>
-	</div>
+<div>
+	<p>Participation in this study is voluntary and may be conducted anywhere that you have a computational device and an internet connection. We foresee no risks, discomforts, or immediate benefits as a result of participation.</p>
 
-	<p>Familiarity With Computers</p>
-	<div>
-		<input type="radio" name="tech" value="casual"> I use a computer occasionally, for basic tasks<br>
-		<input type="radio" name="tech" value="comfortable"> I use a computer every day<br>
-		<input type="radio" name="tech" value="power"> I change my computers' settings on a regular basis<br>
-		<input type="radio" name="tech" value="programmer">I know regular expressions <br>
-		<input type="radio" name="tech" value="none">I don't want to say <br>
-	</div>
+	<p> By participating in this test, you are providing consent that we may use the data collected for our research. If you change your mind about your participation at any time during the testing, you may leave the experiment. Your data will not be used.	</p>
 
-	<p>note: Your data will not be stored until you have completed the exercise. If you are under 18, you are not eligible to participate in 					 this exercise and will be redirected away from this page.</p>
-	<div>
-		<input type="submit"> 
-	</div>
-</form>
+	<p>The security and confidentiality of information collected from you online cannot be guaranteed.  Confidentiality will be kept to the extent permitted by the technology being used.  Information collected online can be intercepted, corrupted, lost, destroyed, arrive late or incomplete, or contain viruses.	</p>
 
+	<p>If you have questions about your rights or welfare as a participant, please contact the Oregon State University Institutional Review Board (IRB) Office, at (541) 737-8008 or by email at IRB@oregonstate.edu).	</p>
+	
+</div>
+<div>	
+	<!-- This form will be POSTed to /form -->
+	<form method="post" action="/form">
+		{{#error}}
+		<div class="error">{{ error }}</div>
+		{{/error}}
+		<p>Gender</p>			
+		<div>
+			<input type="radio" name="sex" value="male">Male<br>
+			<input type="radio" name="sex" value="female">Female<br>
+			<input type="radio" name="sex" value="none">I don't want to say<br>
+		</div>
+
+		<p>Age</p>
+		<div>
+			<input type="radio" name="age" value="kid">Under 18<br>
+			<input type="radio" name="age" value="adult">18-30<br>
+			<input type="radio" name="age" value="mature">31-45<br>
+			<input type="radio" name="age" value="verymature">46-60<br>
+			<input type="radio" name="age" value="senior">60+<br>
+		</div>
+
+		<p>Familiarity With Computers</p>
+		<div>
+			<input type="radio" name="tech" value="casual"> I use a computer occasionally, for basic tasks<br>
+			<input type="radio" name="tech" value="comfortable"> I use a computer every day<br>
+			<input type="radio" name="tech" value="power"> I change my computers' settings on a regular basis<br>
+			<input type="radio" name="tech" value="programmer">I know regular expressions <br>
+			<input type="radio" name="tech" value="none">I don't want to say <br>
+		</div>
+
+		<p>note: Your data will not be stored until you have completed the exercise. If you are under 18, you are not eligible to participate in 					 this exercise and will be redirected away from this page.</p>
+		<div>
+			<input type="submit"> 
+		</div>
+	</form>
+</div>

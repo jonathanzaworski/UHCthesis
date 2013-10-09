@@ -110,7 +110,7 @@ module.exports = function (app) {
   // it.
 	app.get('/start', function (req, res, next) {
     var params = {
-			pageName: 'First Page',
+			pageName: 'Study into Alternate Menu Design',
 			bootstrap: []		
 		};
     var data = {
@@ -315,7 +315,13 @@ module.exports = function (app) {
  
      //use this link for heroku database: mongodb://heroku:bdca8308645ba6dd5dbaff676c5c2597@dharma.mongohq.com:10092/app16769713
 
-		var testObject = {
+//		console.log(testObject);
+
+		MongoClient.connect('mongodb://heroku:bdca8308645ba6dd5dbaff676c5c2597@dharma.mongohq.com:10092/app16769713', function(err, db) {
+			if(err) throw err;
+
+			var collection = db.collection('sessionData');
+			var testObject = {
 //		***Don't try to run until you've set it up to run this stuff.***
 				demographicData : req.session.demographics,
 				menuType : req.session.menuVar,
@@ -324,20 +330,6 @@ module.exports = function (app) {
 //				endTimes : req.session.pageEndTime,
 				clickEvents : req.session.clickEvent
 		};
-
-		console.log(testObject);
-/*
-		MongoClient.connect('mongodb://127.0.0.1:27017/thesisdb', function(err, db) {
-			if(err) throw err;
-
-			var collection = db.collection('sessionData');
-			var testObject = {
-//		***Don't try to run until you've set it up to run this stuff.***
-//				demographicData : req.session.demographics,
-				targets : req.session.destination,
-				startTimes : req.session.pageStartTime,
-				endTimes : req.session.pageEndTime
-			};
 			collection.insert({Testdata : testObject }, function(err, docs) {
 
 				collection.count(function(err, count) {
@@ -352,8 +344,8 @@ module.exports = function (app) {
 				});      
 			});
 		})
-*/
-		res.redirect('/null');
+
+		res.redirect('http://google.com');
   });
 
 	// TEST: THIS WASN'T A DISASTER. SOMEHOW.
