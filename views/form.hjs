@@ -30,6 +30,7 @@
 			<input type="radio" name="age" value="mature">31-45<br>
 			<input type="radio" name="age" value="verymature">46-60<br>
 			<input type="radio" name="age" value="senior">60+<br>
+			<input type="radio" name="age" value="none">I don't want to say<br>
 		</div>
 
 		<p>Familiarity With Computers</p>
