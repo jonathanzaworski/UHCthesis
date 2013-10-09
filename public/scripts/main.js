@@ -17,14 +17,19 @@ jQuery(document).ready(function ($) {
 
 	$('a[href!=\"' + bootstrap.nextPage + '\"]').bind("click", function(e) {
 		e.preventDefault();
-		$.post('/events', { 
-			clicks: 'bad',
-			target: $(e.target).attr('href'),
-			time: Date.now()
-		});
-    alert('You clicked on the wrong link.');						
+		console.log(bootstrap.nextPage);
+		console.log($(e.target).attr('href'));
+		if ($(e.target).attr('href') != '#') {
+			$.post('/events', { 
+				clicks: 'bad',
+				target: $(e.target).attr('href'),
+				time: Date.now()
+			});
+		  alert('You clicked on the wrong link.');
+		}						
 	});
-
+	
+	
 	$('a[href=\"' + bootstrap.nextPage + '\"]').bind("click", function(e) {
 		e.preventDefault();
 		$.post('/events', { 

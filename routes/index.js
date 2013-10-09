@@ -92,7 +92,7 @@ function showNextPage (req, res, target, bootstrap) {
 	var currentPage = _.compact(req.url.split('/'));
 			currentPage = capitalize(currentPage[0]) + currentPage[1];
 
-	var menuVar = "radial";
+	var menuVar = [];
 
 	var data = {
 		partials: { body: 'index' },
@@ -171,7 +171,7 @@ module.exports = function (app) {
 		req.session.pageCounter = 0;
 		req.session.pageStartTime= [Date.now()];
     // Set some defaults for the view data
-		var menuVar = "radial"; //call to function will go here. this is for testing purposes.
+		var menuVar = []; //call to function will go here. this is for testing purposes.
 		var target = randomizer();
 		var bootstrap = { nextPage: target };  
 				target = _.compact(target.split('/'));

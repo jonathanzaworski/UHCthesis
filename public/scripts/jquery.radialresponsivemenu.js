@@ -191,7 +191,7 @@
 				/* ------------ Looping for INNER Ring - Sub-Menu level toggle and animation ------------*/		
 				for( var index = 0; index < options.innerRing_items; index++ ){
 				    angleRad = angleDegree * toRadians;
-					xCoord = options.innerRing_radius * Math.cos( angleRad );
+					xCoord = - options.innerRing_radius * Math.cos( angleRad );
 					yCoord = options.innerRing_radius * Math.sin( angleRad );	
 					$(this).parent().children(selectParent).children(' li:nth-child('+ (index+1) +')').animate({ left: xCoord*xPosMod-xPositionAdjust , top: yCoord*yPosMod-yPositionAdjust}, 200);
 					angleDegree += innerAngleIncrease;
@@ -205,7 +205,7 @@
 					/* ------------ Looping for OUTER Ring (if enabled) - Sub-Menu level toggle and animation ------------*/				
 					for( var index = options.innerRing_items; index < options.innerRing_items + options.outerRing_items; index++ ){
 			    		angleRad = angleDegree * toRadians;
-						xCoord = options.outerRing_radius * Math.cos( angleRad );
+						xCoord = - options.outerRing_radius * Math.cos( angleRad );
 						yCoord = options.outerRing_radius * Math.sin( angleRad );			
 						$(this).parent().children(selectParent).children(' li:nth-child('+ (index+1) +')').animate({ left: xCoord*xPosMod-xPositionAdjust, top: yCoord*yPosMod-yPositionAdjust }, 200);
 						angleDegree += outerAngleIncrease;

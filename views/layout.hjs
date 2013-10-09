@@ -41,9 +41,9 @@
     </footer>
 
     <!-- let's add some client-side scripts, too -->
-		<!link rel="stylesheet" href="/stylesheets/main.css">
+		<link rel="stylesheet" href="/stylesheets/main.css">
     <!script src="/scripts/jquery.min.js"></script>
-    <script src="/scripts/radmain.js"></script>
+    <script src="/scripts/main.js"></script>
 		{{# bootstrap }}
     <script>window.bootstrap = {{{ bootstrap }}};</script>
     {{/ bootstrap }}
