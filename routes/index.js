@@ -7,23 +7,6 @@ var randomizer = require('../randomizer');
 var MongoClient = require('mongodb').MongoClient, 
 		format = require('util').format;
 
-//function isRadial ():Boolean {
-//		return Math.random() >= 0.5;
-//};
-
-/*
-function clickEventHandler (req, res, target, clickData) {
-	if (typeof req.session.destination === 'undefined'){
-		req.session.clickEvent = [];
-	}
-	else {
-		req.session.clickEvent.push({
-			clickTarget: req.body.target,
-			clickActual: req.body.clicks,
-			clickTime: req.body.time
-		})
-	}
-};*/
 
 function menuType (menuVar) {
 	var menu;
@@ -92,12 +75,10 @@ function showNextPage (req, res, target, bootstrap) {
 	var currentPage = _.compact(req.url.split('/'));
 			currentPage = capitalize(currentPage[0]) + currentPage[1];
 
-	var menuVar = [];
-
 	var data = {
 		partials: { body: 'index' },
 		title: 'Home' + currentPage,
-		menu: menuType(menuVar),
+		menu: menuType(req.session.menuVar),
 		pageName: currentPage,
 		noun: target,
 		adjective: 'Page',
@@ -144,6 +125,17 @@ module.exports = function (app) {
 			menu: []
     };
 
+		var randBool = Math.round(Math.random());
+				console.log(randBool);
+				switch (randBool) {
+					case 0:
+						req.session.menuVar = "radial";
+						break;
+					case 1:
+						req.session.menuVar = "list";
+						break;
+				};
+
 		res.render('layout', _.extend(data, params));		
 	});
 
@@ -171,7 +163,6 @@ module.exports = function (app) {
 		req.session.pageCounter = 0;
 		req.session.pageStartTime= [Date.now()];
     // Set some defaults for the view data
-		var menuVar = []; //call to function will go here. this is for testing purposes.
 		var target = randomizer();
 		var bootstrap = { nextPage: target };  
 				target = _.compact(target.split('/'));
@@ -185,7 +176,6 @@ module.exports = function (app) {
 
 
     var params = _.extend(defaults, _.pick(req.session, 'noun', 'adjective', 'pageName'));
-		//var temp = menuType(menudata.root);	
 
     // Define some data for the view...
     var data = {
@@ -197,7 +187,7 @@ module.exports = function (app) {
 
       // ..and "title" is used by the view
       title: 'Home',
-			menu: menuType(menuVar)
+			menu: menuType(req.session.menuVar)
     };
 
     // Render the layout. Routing middleware *must*
@@ -207,7 +197,6 @@ module.exports = function (app) {
     // stack. If they do not, the application *will*
     // hang.
     res.render('layout', _.extend(data, params));
-		//console.log(data.menu)
   });
 
 
@@ -329,6 +318,7 @@ module.exports = function (app) {
 		var testObject = {
 //		***Don't try to run until you've set it up to run this stuff.***
 				demographicData : req.session.demographics,
+				menuType : req.session.menuVar,
 				targets : req.session.destination,
 				startTimes : req.session.pageStartTime,
 //				endTimes : req.session.pageEndTime,
