@@ -266,15 +266,22 @@ module.exports = function (app) {
       // We still want to keep the submitted values around,
       // so we'll `extend` data with the body of the
       // submitted request.
-      return res.render('layout', _.extend(data, req.body));
+
+				return res.render('layout', _.extend(data, req.body));
     }
 
     // Ok, now we've succeeded. Groovy. We'll store the
     // variables in the user's session for later use...
-    req.session.demographics = {
-			age :  req.body.age,
-			gender : req.body.sex  , 
-			techSavvy: req.body.tech
+		console.log(req.body)
+		if (req.body.age == "kid") {
+			return res.redirect('http://google.com');
+		}
+		else {
+		  req.session.demographics = {
+				age :  req.body.age,
+				gender : req.body.sex  , 
+				techSavvy: req.body.tech
+			};
 		};
 
     req.session.save(function (err) {
